@@ -28,6 +28,8 @@ RUN	set -ex; \
 		php-xmlrpc php-zip \
   # vim
     vim \
+  # envsubst
+    gettext-base \
   # phpmyadminをwgetでインストールするためにwgetをインストール
     wget \
   # SSL証明書の作成のためのパッケージ
@@ -67,7 +69,8 @@ RUN service mysql start; \
   mysql --execute="GRANT ALL PRIVILEGES ON *.* TO 'wordpress'@'localhost' IDENTIFIED BY 'wordpress' WITH GRANT OPTION;"
 
 # nginx内にphpmyadminとwordpressの設定が書かれたlocalhostファイルをコピーする
-COPY /srcs/localhost /etc/nginx/sites-available/
+COPY /srcs/localhost.template /etc/nginx/sites-available/
+COPY /srcs/localhost.template /etc/nginx/sites-available/localhost
 # バーチャルホスト「localhost」の設定を通す
 RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/localhost
 
